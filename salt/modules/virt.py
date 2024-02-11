@@ -425,6 +425,21 @@ def _get_on_crash(dom):
     return node.text if node is not None else ""
 
 
+def _get_on_lockfailure(dom):
+    """
+    Return `on_lockfailure` setting from the named vm
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' virt.get_on_lockfailure <domain>
+    """
+    node = ElementTree.fromstring(get_xml(dom)).find("on_lockfailure")
+    return node.text if node is not None else ""
+
+
+
 def _get_nics(dom):
     """
     Get domain network interfaces from a libvirt domain object.
@@ -4345,6 +4360,7 @@ def vm_info(vm_=None, **kwargs):
             "on_crash": _get_on_crash(dom),
             "on_reboot": _get_on_reboot(dom),
             "on_poweroff": _get_on_poweroff(dom),
+            "on_lockfailure": _get_on_lockfailure(dom),
             "maxMem": int(raw[1]),
             "mem": int(raw[2]),
             "state": VIRT_STATE_NAME_MAP.get(raw[0], "unknown"),
